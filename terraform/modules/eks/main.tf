@@ -5,10 +5,10 @@ provider "kubernetes" {
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
-  version = "~> 18.26.6"
+  version = "18.26.6"
 
   cluster_name    = "${var.namespace}-eks"
-  cluster_version = "~> 1.22"
+  cluster_version = "1.22"
 
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids

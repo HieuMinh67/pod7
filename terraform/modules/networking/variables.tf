@@ -21,5 +21,5 @@ variable "private_subnets" {
 
 variable "database_subnets" {
   type    = list(string)
-  default = null
+  default = []
 }
