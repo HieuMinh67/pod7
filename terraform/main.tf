@@ -44,12 +44,12 @@ resource "aws_vpc_peering_connection" "baston-prod-vpc" {
   }
 }
 
-module "non_prod_cluster" {
-  source     = "./modules/eks"
-  namespace  = "prod"
-  vpc_id     = module.prod_networking.vpc_id
-  subnet_ids = module.prod_networking.private_subnets
-}
+# module "non_prod_cluster" {
+#   source     = "./modules/eks"
+#   namespace  = "prod"
+#   vpc_id     = module.non_prod_networking.vpc_id
+#   subnet_ids = module.non_prod_networking.private_subnets
+# }
 
 module "prod_cluster" {
   source     = "./modules/eks"
