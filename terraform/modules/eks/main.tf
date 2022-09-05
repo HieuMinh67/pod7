@@ -13,6 +13,8 @@ module "eks" {
   vpc_id     = var.vpc_id
   subnet_ids = var.subnet_ids
 
+  create_cloudwatch_log_group = true
+
   eks_managed_node_groups = {
     one = {
       name          = "${var.namespace}-ng"
