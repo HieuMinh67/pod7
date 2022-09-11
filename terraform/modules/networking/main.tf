@@ -7,6 +7,10 @@ data "aws_availability_zones" "az" {
   }
 }
 
+locals {
+  cluster_name = "eks-${var.namespace}"
+}
+
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.14.2"
@@ -20,6 +24,42 @@ module "vpc" {
   private_subnets  = var.private_subnets
   database_subnets = var.database_subnets
 
-  create_igw = true
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+  create_igw           = true
   # map_public_ip_on_launch = 
+}
+
+module "lb_sg" {
+  source = "terraform-in-action/sg/aws"
+  vpc_id = module.vpc.vpc_id
+  ingress_rules = [{
+    port        = 80
+    cidr_blocks = ["0.0.0.0/0"]
+  }]
+}
+
+module "websvr_sg" {
+  source = "terraform-in-action/sg/aws"
+  vpc_id = module.vpc.vpc_id
+  ingress_rules = [
+    {
+      port            = 8080
+      security_groups = [module.lb_sg.security_group.id]
+    },
+    {
+      port        = 22
+      cidr_blocks = ["10.0.0.0/16"]
+    }
+  ]
+}
+
+module "db_sg" {
+  source = "terraform-in-action/sg/aws"
+  vpc_id = module.vpc.vpc_id
+  ingress_rules = [{
+    port            = 3306
+    security_groups = [module.websvr_sg.security_group.id]
+  }]
 }

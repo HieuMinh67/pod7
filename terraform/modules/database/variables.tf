@@ -2,10 +2,10 @@ variable "namespace" {
   type = string
 }
 
-variable "vpc_id" {
+variable "vpc" {
   type = any
 }
 
-variable "subnet_ids" {
-
+variable "sg" {
+  type = any
 }
