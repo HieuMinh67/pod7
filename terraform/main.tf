@@ -35,7 +35,7 @@ data "aws_availability_zones" "az" {
   }
 }
 
-module "baston_networking" {
+module "bastion_networking" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "3.14.2"
 
@@ -48,9 +48,8 @@ module "baston_networking" {
   private_subnets = ["10.1.10.0/24", "10.1.11.0/24", "10.1.12.0/24"]
 }
 
-
 resource "aws_vpc_peering_connection" "baston-non_prod-vpc" {
-  vpc_id      = module.baston_networking.vpc_id
+  vpc_id      = module.bastion_networking.vpc_id
   peer_vpc_id = module.non_prod_networking.vpc.vpc_id
   auto_accept = true
 
@@ -60,7 +59,7 @@ resource "aws_vpc_peering_connection" "baston-non_prod-vpc" {
 }
 
 resource "aws_vpc_peering_connection" "baston-prod-vpc" {
-  vpc_id      = module.baston_networking.vpc_id
+  vpc_id      = module.bastion_networking.vpc_id
   peer_vpc_id = module.prod_networking.vpc.vpc_id
   auto_accept = true
 
@@ -109,12 +108,30 @@ data "aws_ami" "amazon_linux" {
 
 resource "aws_instance" "ec2-bastion" {
   ami           = data.aws_ami.amazon_linux.id
-  subnet_id     = module.baston_networking.private_subnets[0]
+  subnet_id     = module.bastion_networking.private_subnets[0]
   instance_type = "t2.micro"
 
   tags = {
     "Name" = "Bastion Host"
   }
+}
+
+#module "bastion_host" {
+#  source = "./modules/autoscaling"
+#  ssh_keypair = var.ssh_keypair
+#
+#  vpc = module.bastion_networking
+#  sg = module.bastion_networking.sg
+#}
+
+module "prod_db_user" {
+  source    = "./modules/secrets_manager"
+  namespace = "prod"
+}
+
+module "non_prod_db_user" {
+  source    = "./modules/secrets_manager"
+  namespace = "dev"
 }
 
 module "prod_db" {
@@ -126,7 +143,7 @@ module "prod_db" {
 
 module "non_prod_db" {
   source    = "./modules/database"
-  namespace = "prod"
+  namespace = "dev"
   vpc       = module.non_prod_networking.vpc
   sg        = module.non_prod_networking.sg
 }
