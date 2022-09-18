@@ -4,9 +4,14 @@ variable "region" {
 }
 
 variable "access_key" {
-  type    = string
+  type = string
 }
 
 variable "secret_key" {
-  type    = string
+  type = string
+}
+
+variable "non_prod_cidr" {
+  type = string
+  default = "10.3.0.0/16"
 }

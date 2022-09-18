@@ -15,6 +15,9 @@ module "eks" {
 
   create_cloudwatch_log_group = true
 
+  cluster_endpoint_private_access = true
+  cluster_endpoint_public_access  = false
+
   eks_managed_node_groups = {
     one = {
       name          = "${var.namespace}-ng"
