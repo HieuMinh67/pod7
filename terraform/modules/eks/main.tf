@@ -1,7 +1,3 @@
-provider "kubernetes" {
-  host                   = module.eks.cluster_endpoint
-  cluster_ca_certificate = base64decode(module.eks.cluster_certificate_authority_data)
-}
 
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
@@ -29,28 +25,3 @@ module "eks" {
     }
   }
 }
-# module "eks" {
-#   source  = "terraform-aws-modules/eks/aws"
-#   version = "~> 17.24"
-
-#   cluster_name    = "eks-${var.namespace}"
-#   cluster_version = "1.22"
-
-#   vpc_id  = var.vpc_id
-#   subnets = var.subnet_ids
-
-#   node_groups = {
-#     one = {
-#       name          = "${var.namespace}-ng"
-#       instance_type = ["t3.small"]
-
-#       min_size     = 1
-#       max_size     = 3
-#       desired_size = 2
-#     }
-#   }
-
-#   write_kubeconfig       = true
-#   kubeconfig_name        = "${var.namespace}-eks"
-#   kubeconfig_output_path = "./"
-# }

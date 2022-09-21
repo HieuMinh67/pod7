@@ -1,6 +1,6 @@
 variable "region" {
   type    = string
-  default = "us-west-2"
+  default = "us-east-1"
 }
 
 variable "access_key" {
@@ -12,6 +12,6 @@ variable "secret_key" {
 }
 
 variable "non_prod_cidr" {
-  type = string
+  type    = string
   default = "10.3.0.0/16"
 }

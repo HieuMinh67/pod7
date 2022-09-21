@@ -1,12 +1,3 @@
-data "aws_availability_zones" "az" {
-  state = "available"
-
-  filter {
-    name   = "region-name"
-    values = var.region_names
-  }
-}
-
 locals {
   cluster_name = "eks-${var.namespace}"
 }
@@ -18,7 +9,7 @@ module "vpc" {
   name = "${var.namespace}-vpc"
 
   cidr = var.vpc_cidr
-  azs  = data.aws_availability_zones.az.names
+  azs  = var.availability_zones
 
   public_subnets   = var.public_subnets
   private_subnets  = var.private_subnets
@@ -29,6 +20,19 @@ module "vpc" {
   enable_dns_hostnames = true
   create_igw           = true
   # map_public_ip_on_launch = 
+}
+
+resource "aws_security_group" "eks-master" {
+  name        = "eks-${var.namespace}-master-nodes"
+  description = "Master nodes security group"
+  vpc_id      = module.vpc.vpc_id
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 module "lb_sg" {

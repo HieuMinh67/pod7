@@ -1,30 +1,22 @@
 module "prod_networking" {
-  source           = "./modules/networking"
-  namespace        = "prod"
-  vpc_cidr         = "10.2.0.0/16"
-  public_subnets   = ["10.2.0.0/24", "10.2.1.0/24", "10.2.2.0/24"]
-  private_subnets  = ["10.2.10.0/24", "10.2.11.0/24", "10.2.12.0/24"]
-  database_subnets = ["10.2.100.0/24", "10.2.110.0/24", "10.2.120.0/24"]
+  source             = "./modules/networking"
+  namespace          = "prod"
+  vpc_cidr           = "10.2.0.0/16"
+  public_subnets     = ["10.2.0.0/24", "10.2.1.0/24", "10.2.2.0/24"]
+  private_subnets    = ["10.2.10.0/24", "10.2.11.0/24", "10.2.12.0/24"]
+  database_subnets   = ["10.2.100.0/24", "10.2.110.0/24", "10.2.120.0/24"]
+  availability_zones = data.aws_availability_zones.az.names
 }
 
 module "non_prod_networking" {
-  source           = "./modules/networking"
-  namespace        = "non-prod"
-  vpc_cidr         = var.non_prod_cidr
-  public_subnets   = ["10.3.0.0/24", "10.3.1.0/24", "10.3.2.0/24"]
-  private_subnets  = ["10.3.10.0/24", "10.3.11.0/24", "10.3.12.0/24"]
-  database_subnets = ["10.3.100.0/24", "10.3.110.0/24", "10.3.120.0/24"]
+  source             = "./modules/networking"
+  namespace          = "non-prod"
+  vpc_cidr           = var.non_prod_cidr
+  public_subnets     = ["10.3.0.0/24", "10.3.1.0/24", "10.3.2.0/24"]
+  private_subnets    = ["10.3.10.0/24", "10.3.11.0/24", "10.3.12.0/24"]
+  database_subnets   = ["10.3.100.0/24", "10.3.110.0/24", "10.3.120.0/24"]
+  availability_zones = data.aws_availability_zones.az.names
 }
-
-# module "bastion_networking" {
-#   source          = "./modules/networking"
-#   namespace       = "bastion"
-#   vpc_cidr        = "10.1.0.0/16"
-#   public_subnets  = ["10.1.0.0/24", "10.1.1.0/24", "10.1.2.0/24"]
-#   private_subnets = ["10.1.10.0/24", "10.1.11.0/24", "10.1.12.0/24"]
-
-#   cluster_name = local.cluster_name
-# }
 
 module "non_prod_cluster" {
   source     = "./modules/eks"
@@ -75,8 +67,14 @@ module "bastion_host" {
   prod_networking            = module.prod_networking
   bastion_ingress_cidr_block = "10.1.0.0/16"
   kubectl_config             = local.kubeconfig
-  eks_cidr = var.non_prod_cidr
-  eks_sg_id = module.non_prod_cluster.sg_id
+  eks_cidr                   = var.non_prod_cidr
+  prod_eks_sg_id             = module.prod_cluster.sg_id
+  non_prod_eks_sg_id         = module.non_prod_cluster.sg_id
+  availability_zones         = data.aws_availability_zones.az.names
+
+  access_key     = var.access_key
+  default_region = var.region
+  secret_key     = var.secret_key
 }
 
 module "prod_db_user" {

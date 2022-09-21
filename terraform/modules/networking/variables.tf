@@ -2,11 +2,6 @@ variable "namespace" {
   type = string
 }
 
-variable "region_names" {
-  type    = list(string)
-  default = ["us-east-1", "us-west-2"]
-}
-
 variable "vpc_cidr" {
   type = string
 }
@@ -22,4 +17,8 @@ variable "private_subnets" {
 variable "database_subnets" {
   type    = list(string)
   default = []
+}
+
+variable "availability_zones" {
+  type = list(string)
 }
