@@ -7,5 +7,9 @@ variable "vpc_id" {
 }
 
 variable "subnet_ids" {
+  type = any
+}
 
+variable "eks_user_role" {
+  type = string
 }

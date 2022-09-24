@@ -13,3 +13,11 @@ output "name" {
 output "sg_id" {
   value = module.eks.cluster_primary_security_group_id
 }
+
+output "kubeconfig" {
+  value = local.kubeconfig
+}
+
+output "cluster_role_arn" {
+  value = module.eks.cluster_iam_role_arn
+}

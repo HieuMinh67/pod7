@@ -1,4 +1,3 @@
-
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 18.26.6"
@@ -24,4 +23,18 @@ module "eks" {
       desired_size = 2
     }
   }
+
+#  iam_role_additional_policies = [var.eks_user_role]
+  manage_aws_auth_configmap = true
+  create_aws_auth_configmap = true
+  aws_auth_accounts = [data.aws_caller_identity.current.account_id]
+  aws_auth_roles = [
+  {
+      rolearn  = var.eks_user_role
+      username = "eks-user"
+      groups   = ["system:masters"]
+    },
+  ]
 }
+
+data "aws_caller_identity" "current" {}

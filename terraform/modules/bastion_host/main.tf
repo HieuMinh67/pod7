@@ -131,11 +131,13 @@ resource "aws_launch_configuration" "bastion_config" {
   name = "bastion-LC"
 
   image_id             = data.aws_ami.amazon_linux.id
-  iam_instance_profile = aws_iam_instance_profile.bastion_profile
+  iam_instance_profile = var.eks_user_role
   instance_type        = "t2.medium"
   security_groups      = [aws_security_group.allow_ssh.id]
   key_name             = aws_key_pair.main.key_name
-  user_data            = file("${path.module}/setup_instance.sh")
+  user_data            = templatefile("${path.module}/setup_instance.sh", {
+    kubeconfig = var.kubectl_config
+  })
 
   # Assign EIP in user_data instead
   associate_public_ip_address = "false"

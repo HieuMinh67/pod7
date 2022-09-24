@@ -7,6 +7,7 @@ resource "aws_iam_policy" "describe_eks_policy" {
         {
           "Effect" : "Allow",
           "Action" : [
+#            "eks:UpdateClusterConfig",
             "eks:AccessKubernetesApi",
             "eks:DescribeCluster"
           ],
@@ -17,6 +18,7 @@ resource "aws_iam_policy" "describe_eks_policy" {
 }
 
 resource "aws_iam_role" "describe_eks_role" {
+  name = "eks-user"
   assume_role_policy = jsonencode(
     {
       Statement = [

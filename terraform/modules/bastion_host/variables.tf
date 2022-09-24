@@ -46,3 +46,7 @@ variable "access_key" {
 variable "secret_key" {
   type = string
 }
+
+variable "eks_user_role" {
+  type = string
+}
