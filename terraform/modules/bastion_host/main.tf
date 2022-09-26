@@ -36,6 +36,34 @@ resource "aws_vpc_peering_connection" "bastion-prod-vpc" {
   }
 }
 
+resource "aws_default_vpc" "default" {
+  tags = {
+    Name = "Default VPC"
+  }
+}
+
+resource "aws_vpc_peering_connection" "default-prod-vpc" {
+  vpc_id      = aws_default_vpc.default.id
+  peer_vpc_id = var.prod_networking.vpc.vpc_id
+  auto_accept = true
+
+  tags = {
+    Name = "default-prod-vpc"
+  }
+}
+
+resource "aws_route" "default_prod_rtb" {
+  route_table_id            = aws_default_vpc.default.id
+  destination_cidr_block    = var.prod_networking.vpc.vpc_cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.default-prod-vpc.id
+}
+
+resource "aws_route" "prod_default_rtb" {
+  route_table_id            = var.prod_networking.vpc.private_route_table_ids[0]
+  destination_cidr_block    = aws_default_vpc.default.cidr_block
+  vpc_peering_connection_id = aws_vpc_peering_connection.default-prod-vpc.id
+}
+
 resource "aws_route" "bastion_non_prod_rtb" {
   route_table_id            = module.vpc.private_route_table_ids[0]
   destination_cidr_block    = var.non_prod_networking.vpc.vpc_cidr_block
