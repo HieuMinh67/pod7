@@ -16,96 +16,10 @@ module "vpc" {
   private_subnets = ["10.1.10.0/24", "10.1.11.0/24", "10.1.12.0/24"]
 }
 
-resource "aws_vpc_peering_connection" "bastion-non_prod-vpc" {
-  vpc_id      = module.vpc.vpc_id
-  peer_vpc_id = var.non_prod_networking.vpc.vpc_id
-  auto_accept = true
-
-  tags = {
-    Name = "bastion-non_prod-vpc"
-  }
-}
-
-resource "aws_vpc_peering_connection" "bastion-prod-vpc" {
-  vpc_id      = module.vpc.vpc_id
-  peer_vpc_id = var.prod_networking.vpc.vpc_id
-  auto_accept = true
-
-  tags = {
-    Name = "bastion-prod-vpc"
-  }
-}
-
 resource "aws_default_vpc" "default" {
   tags = {
     Name = "Default VPC"
   }
-}
-
-resource "aws_vpc_peering_connection" "default-prod-vpc" {
-  vpc_id      = aws_default_vpc.default.id
-  peer_vpc_id = var.prod_networking.vpc.vpc_id
-  auto_accept = true
-
-  tags = {
-    Name = "default-prod-vpc"
-  }
-}
-
-resource "aws_route" "default_prod_rtb" {
-  route_table_id            = aws_default_vpc.default.id
-  destination_cidr_block    = var.prod_networking.vpc.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.default-prod-vpc.id
-}
-
-resource "aws_route" "prod_default_rtb" {
-  route_table_id            = var.prod_networking.vpc.private_route_table_ids[0]
-  destination_cidr_block    = aws_default_vpc.default.cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.default-prod-vpc.id
-}
-
-resource "aws_route" "bastion_non_prod_rtb" {
-  route_table_id            = module.vpc.private_route_table_ids[0]
-  destination_cidr_block    = var.non_prod_networking.vpc.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.bastion-non_prod-vpc.id
-}
-
-resource "aws_route" "non_prod_bastion_rtb" {
-  route_table_id            = var.non_prod_networking.vpc.private_route_table_ids[0]
-  destination_cidr_block    = module.vpc.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.bastion-non_prod-vpc.id
-}
-
-resource "aws_route" "bastion_prod_rtb" {
-  route_table_id            = module.vpc.private_route_table_ids[0]
-  destination_cidr_block    = var.prod_networking.vpc.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.bastion-prod-vpc.id
-}
-
-resource "aws_route" "prod_bastion_rtb" {
-  route_table_id            = var.prod_networking.vpc.private_route_table_ids[0]
-  destination_cidr_block    = module.vpc.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.bastion-prod-vpc.id
-}
-
-resource "aws_security_group_rule" "prod_eks_https" {
-  from_port                = 443
-  protocol                 = "tcp"
-  security_group_id        = var.prod_eks_sg_id
-  to_port                  = 443
-  type                     = "ingress"
-  source_security_group_id = aws_security_group.allow_ssh.id
-  description              = "Allow HTTPS from Bastion Host"
-}
-
-resource "aws_security_group_rule" "non_prod_eks_https" {
-  from_port                = 443
-  protocol                 = "tcp"
-  security_group_id        = var.non_prod_eks_sg_id
-  to_port                  = 443
-  type                     = "ingress"
-  source_security_group_id = aws_security_group.allow_ssh.id
-  description              = "Allow HTTPS from Bastion Host"
 }
 
 resource "aws_security_group" "allow_ssh" {
