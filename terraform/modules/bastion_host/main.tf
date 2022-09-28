@@ -16,12 +16,6 @@ module "vpc" {
   private_subnets = ["10.1.10.0/24", "10.1.11.0/24", "10.1.12.0/24"]
 }
 
-resource "aws_default_vpc" "default" {
-  tags = {
-    Name = "Default VPC"
-  }
-}
-
 resource "aws_security_group" "allow_ssh" {
   name        = "eks-bastion"
   description = "Bastion security group"

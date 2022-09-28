@@ -24,10 +24,7 @@ module "eks" {
     }
   }
 
-#  iam_role_additional_policies = [var.eks_user_role]
   manage_aws_auth_configmap = true
-#  create_aws_auth_configmap = true
-  aws_auth_accounts = [data.aws_caller_identity.current.account_id]
   aws_auth_roles = [
   {
       rolearn  = var.eks_user_role
@@ -36,5 +33,3 @@ module "eks" {
     },
   ]
 }
-
-data "aws_caller_identity" "current" {}
