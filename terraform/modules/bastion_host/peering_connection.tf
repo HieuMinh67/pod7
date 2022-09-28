@@ -1,3 +1,9 @@
+resource "aws_default_vpc" "default" {
+  tags = {
+    Name = "Default VPC"
+  }
+}
+
 resource "aws_vpc_peering_connection" "bastion-non_prod-vpc" {
   vpc_id      = module.vpc.vpc_id
   peer_vpc_id = var.non_prod_networking.vpc.vpc_id
