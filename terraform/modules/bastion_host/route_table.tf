@@ -37,7 +37,7 @@ resource "aws_route" "prod_default_rtb" {
 resource "aws_route" "default_non_prod_rtb" {
   route_table_id            = aws_default_vpc.default.default_route_table_id
   destination_cidr_block    = var.non_prod_networking.vpc.vpc_cidr_block
-  vpc_peering_connection_id = aws_vpc_peering_connection.default-prod-vpc.id
+  vpc_peering_connection_id = aws_vpc_peering_connection.default-non-prod-vpc.id
 }
 
 resource "aws_route" "non_prod_default_rtb" {

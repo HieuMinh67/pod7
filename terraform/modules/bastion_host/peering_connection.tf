@@ -40,6 +40,6 @@ resource "aws_vpc_peering_connection" "default-non-prod-vpc" {
   auto_accept = true
 
   tags = {
-    Name = "default-prod-vpc"
+    Name = "default-non-prod-vpc"
   }
 }
