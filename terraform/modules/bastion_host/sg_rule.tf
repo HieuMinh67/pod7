@@ -1,7 +1,7 @@
 data "aws_security_group" "cloud9_sg" {
   filter {
     name = "Name"
-    values = "cloud9"
+    values = ["aws-cloud9-*"]
   }
 }
 resource "aws_security_group_rule" "default_prod_eks_https" {
