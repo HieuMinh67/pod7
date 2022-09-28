@@ -1,5 +1,5 @@
 data "aws_security_group" "cloud9_sg" {
-  filter = {
+  filter {
     name = "Name"
     values = "cloud9"
   }
