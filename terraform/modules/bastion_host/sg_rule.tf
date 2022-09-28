@@ -1,7 +1,7 @@
 data "aws_security_group" "cloud9_sg" {
   vpc_id = aws_default_vpc.default.id
   tags = {
-    Name = "aws-cloud9"
+    Name = "aws-cloud9-*"
   }
 }
 resource "aws_security_group_rule" "default_prod_eks_https" {
