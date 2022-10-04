@@ -4,29 +4,11 @@ resource "aws_default_vpc" "default" {
   }
 }
 
-data "aws_subnet" "this" {
-  availability_zone = "${var.region}a"
-  state = "available"
-  vpc_id = aws_default_vpc.default.id
-  default_for_az = true
-}
-
 resource "aws_cloud9_environment_ec2" "this" {
   instance_type = "t3.small"
   name          = "pod7-terraform"
 
   subnet_id = data.aws_subnet.this.id
-}
-
-data "aws_instance" "cloud9_instance" {
-  filter {
-    name = "tag:aws:cloud9:environment"
-    values = [aws_cloud9_environment_ec2.this.id]
-  }
-}
-
-output "cloud9_url" {
-  value = "https://${var.region}.console.aws.amazon.com/cloud9/ide/${aws_cloud9_environment_ec2.this.id}"
 }
 
 resource "aws_iam_role" "this" {

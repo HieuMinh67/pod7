@@ -15,7 +15,11 @@ variable "prod_networking" {
   type = any
 }
 
-variable "kubectl_config" {
+variable "prod_kubectl_config" {
+  type = any
+}
+
+variable "non_prod_kubectl_config" {
   type = any
 }
 

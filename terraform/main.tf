@@ -23,7 +23,7 @@ module "non_prod_cluster" {
   namespace  = "non-prod"
   vpc_id     = module.non_prod_networking.vpc.vpc_id
   subnet_ids = module.non_prod_networking.private_subnets
-#  eks_user_role = aws_iam_policy.describe_eks_policy.arn
+  #  eks_user_role = aws_iam_policy.describe_eks_policy.arn
   eks_user_role = aws_iam_role.describe_eks_role.arn
 }
 
@@ -32,7 +32,7 @@ module "prod_cluster" {
   namespace  = "prod"
   vpc_id     = module.prod_networking.vpc.vpc_id
   subnet_ids = module.prod_networking.private_subnets
-#  eks_user_role = aws_iam_policy.describe_eks_policy.arn
+  #  eks_user_role = aws_iam_policy.describe_eks_policy.arn
   eks_user_role = aws_iam_role.describe_eks_role.arn
 }
 
@@ -42,7 +42,8 @@ module "bastion_host" {
   non_prod_networking        = module.non_prod_networking
   prod_networking            = module.prod_networking
   bastion_ingress_cidr_block = "10.1.0.0/16"
-  kubectl_config             = module.non_prod_cluster.kubeconfig
+  prod_kubectl_config        = module.prod_cluster.kubeconfig
+  non_prod_kubectl_config    = module.non_prod_cluster.kubeconfig
   eks_cidr                   = var.non_prod_cidr
   prod_eks_sg_id             = module.prod_cluster.sg_id
   non_prod_eks_sg_id         = module.non_prod_cluster.sg_id
@@ -51,7 +52,6 @@ module "bastion_host" {
   access_key     = var.access_key
   default_region = var.region
   secret_key     = var.secret_key
-#  eks_user_role  = module.prod_cluster.cluster_role_arn
   eks_user_role  = aws_iam_instance_profile.bastion_profile.arn
 }
 

@@ -7,7 +7,7 @@ resource "aws_iam_policy" "describe_eks_policy" {
         {
           "Effect" : "Allow",
           "Action" : [
-#            "eks:UpdateClusterConfig",
+            #            "eks:UpdateClusterConfig",
             "eks:AccessKubernetesApi",
             "eks:DescribeCluster"
           ],
