@@ -71,7 +71,7 @@ resource "aws_launch_configuration" "bastion_config" {
   instance_type        = "t2.medium"
   security_groups      = [aws_security_group.allow_ssh.id]
   key_name             = aws_key_pair.main.key_name
-  user_data = templatefile("${path.module}/setup_instance.sh", {
+  user_data = templatefile("${path.module}/setup_instance.tftpl", {
     prod_kubeconfig     = var.prod_kubectl_config
     non_prod_kubeconfig = var.non_prod_kubectl_config
   })
