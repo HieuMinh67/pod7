@@ -24,6 +24,14 @@ aws --version
 #echo 'export PATH=$PATH:$HOME/bin' >>~/.bashrc
 #aws-iam-authenticator help
 
+sudo yum install -y git
+
+sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum -y install terraform
+
+su ec2-user
+
 mkdir -p $HOME/.kube
 echo "${prod_kubeconfig}" > $HOME/.kube/prod_config
 echo "${non_prod_kubeconfig}" > $HOME/.kube/non_prod_config
