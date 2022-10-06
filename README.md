@@ -8,6 +8,7 @@
 - Run commands in _cloud9/setup.sh_
 - Copy AWS access key and secret key from sandbox to (.auto).tfvars file in terraform folder (for example: terraform/aws_keys.auto.tfvars) 
 - Terraform apply
-## 3.	Bastion host
-- Connect to bastion host through SSH using the URL output from step 2 \
+## Appendix
+- Connect to bastion host through SSH using the URL output from step 2 and private key automatically generated 
+(saved in ) \
 `ssh ec2-user@<load-balancer-url-from-output> -i private-key-bastion.pem`
