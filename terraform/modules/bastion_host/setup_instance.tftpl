@@ -30,14 +30,17 @@ sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
 
-mkdir -p /home/ec2-user/.kube
-echo "${prod_kubeconfig}" > /home/ec2-user/.kube/prod_config
-echo "${non_prod_kubeconfig}" > /home/ec2-user/.kube/non_prod_config
-chmod -R 644 /home/ec2-user/.kube
+#mkdir -p /home/ec2-user/.kube
+#echo "${prod_kubeconfig}" > /home/ec2-user/.kube/prod_config
+#echo "${non_prod_kubeconfig}" > /home/ec2-user/.kube/non_prod_config
+#chmod -R 644 /home/ec2-user/.kube
 
-curl https://github.com/sbstp/kubie/releases/download/v0.19.0/kubie-linux-amd64
-chmod +x kubie-linux-amd64
-./kubie-linux-amd64
+#export KUBECONFIG=/home/ec2-user/.kube/prod_config:/home/ec2-user/.kube/non_prod_config kubectl config view \
+#    --merge --flatten > out.txt
 
-aws eks update-kubeconfig --name eks-prod --region us-east-1 --alias eks-prod --kubeconfig="/home/ec2-user/.kube/prod_config"
-aws eks update-kubeconfig --name eks-non-prod --region us-east-1 --alias eks-non-prod --kubeconfig="/home/ec2-user/.kube/non_prod_config"
+git clone https://github.com/ahmetb/kubectx /opt/kubectx
+ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
+ln -s /opt/kubectx/kubens /usr/local/bin/kubens
+
+aws eks update-kubeconfig --name eks-prod --region us-east-1 --alias eks-prod
+aws eks update-kubeconfig --name eks-non-prod --region us-east-1 --alias eks-non-prod
