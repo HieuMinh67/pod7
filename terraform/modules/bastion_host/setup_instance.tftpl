@@ -30,13 +30,13 @@ sudo yum install -y yum-utils
 sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
 sudo yum -y install terraform
 
-#mkdir -p /home/ec2-user/.kube
-#echo "${prod_kubeconfig}" > /home/ec2-user/.kube/prod_config
-#echo "${non_prod_kubeconfig}" > /home/ec2-user/.kube/non_prod_config
-#chmod -R 644 /home/ec2-user/.kube
-
-#export KUBECONFIG=/home/ec2-user/.kube/prod_config:/home/ec2-user/.kube/non_prod_config kubectl config view \
-#    --merge --flatten > out.txt
+mkdir -p /home/ec2-user/.kube
+echo "${prod_kubeconfig}" > /home/ec2-user/.kube/prod_config
+echo "${non_prod_kubeconfig}" > /home/ec2-user/.kube/non_prod_config
+chown -R /home/ec2-user/.kube
+export KUBECONFIG="/home/ec2-user/.kube/config"
+#KUBECONFIG=/home/ec2-user/.kube/prod_config:/home/ec2-user/.kube/non_prod_config kubectl config view \
+#    --merge --flatten > /home/ec2-user/.kube/config
 
 sudo git clone https://github.com/ahmetb/kubectx /opt/kubectx
 sudo ln -s /opt/kubectx/kubectx /usr/local/bin/kubectx
