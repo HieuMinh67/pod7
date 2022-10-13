@@ -33,7 +33,6 @@ sudo yum -y install terraform
 mkdir -p /home/ec2-user/.kube
 echo "${prod_kubeconfig}" > /home/ec2-user/.kube/prod_config
 echo "${non_prod_kubeconfig}" > /home/ec2-user/.kube/non_prod_config
-chown ec2-user /home/ec2-user/.kube -R
 export KUBECONFIG="/home/ec2-user/.kube/config"
 #KUBECONFIG=/home/ec2-user/.kube/prod_config:/home/ec2-user/.kube/non_prod_config kubectl config view \
 #    --merge --flatten > /home/ec2-user/.kube/config
@@ -44,3 +43,4 @@ sudo ln -s /opt/kubectx/kubens /usr/local/bin/kubens
 
 aws eks update-kubeconfig --name eks-prod --region us-east-1 --alias eks-prod --kubeconfig="/home/ec2-user/.kube/config"
 aws eks update-kubeconfig --name eks-non-prod --region us-east-1 --alias eks-non-prod --kubeconfig="/home/ec2-user/.kube/config"
+chown ec2-user /home/ec2-user/.kube -R
