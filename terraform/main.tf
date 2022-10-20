@@ -55,28 +55,28 @@ module "bastion_host" {
   eks_user_role  = aws_iam_instance_profile.bastion_profile.arn
 }
 
-#module "prod_db_user" {
-#  source    = "./modules/secrets_manager"
-#  namespace = "prod"
-#}
-#
-#module "non_prod_db_user" {
-#  source    = "./modules/secrets_manager"
-#  namespace = "dev"
-#}
-#
-#module "prod_db" {
-#  source     = "./modules/database"
-#  depends_on = [module.prod_db_user]
-#  namespace  = "prod"
-#  vpc        = module.prod_networking.vpc
-#  sg         = module.prod_networking.sg
-#}
-#
-#module "non_prod_db" {
-#  source     = "./modules/database"
-#  depends_on = [module.non_prod_db_user]
-#  namespace  = "dev"
-#  vpc        = module.non_prod_networking.vpc
-#  sg         = module.non_prod_networking.sg
-#}
+module "prod_db_user" {
+  source    = "./modules/secrets_manager"
+  namespace = "prod"
+}
+
+module "non_prod_db_user" {
+  source    = "./modules/secrets_manager"
+  namespace = "dev"
+}
+
+module "prod_db" {
+  source     = "./modules/database"
+  depends_on = [module.prod_db_user]
+  namespace  = "prod"
+  vpc        = module.prod_networking.vpc
+  sg         = module.prod_networking.sg
+}
+
+module "non_prod_db" {
+  source     = "./modules/database"
+  depends_on = [module.non_prod_db_user]
+  namespace  = "dev"
+  vpc        = module.non_prod_networking.vpc
+  sg         = module.non_prod_networking.sg
+}
