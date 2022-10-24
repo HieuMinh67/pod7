@@ -45,7 +45,7 @@ aws eks update-kubeconfig --name eks-prod --region us-east-1 --alias eks-prod --
 aws eks update-kubeconfig --name eks-non-prod --region us-east-1 --alias eks-non-prod --kubeconfig="/home/ec2-user/.kube/config"
 chown ec2-user /home/ec2-user/.kube -R
 
-git clone https://github.com/HieuMinh67/argocd-app-config
-cd argocd-app-config/terraform
+git clone https://github.com/HieuMinh67/argocd-app-config /home/ec2-user/app-config
+cd /home/ec2-user/app-config/terraform
 terraform init
 terraform apply --auto-approve
