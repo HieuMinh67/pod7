@@ -80,3 +80,10 @@ module "non_prod_db" {
   vpc        = module.non_prod_networking.vpc
   sg         = module.non_prod_networking.sg
 }
+
+module "openvpn" {
+  source = "./modules/vpn"
+
+  server_region = var.region
+  subnet_id = module.non_prod_networking.private_subnets[0]
+}
