@@ -47,5 +47,6 @@ chown ec2-user /home/ec2-user/.kube -R
 
 git clone https://github.com/HieuMinh67/argocd-app-config /home/ec2-user/app-config
 cd /home/ec2-user/app-config/terraform
+chown ec2-user -R /home/ec2-user/app-config/terraform
 terraform init
 terraform apply --auto-approve
