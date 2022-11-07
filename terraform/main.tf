@@ -6,14 +6,6 @@ module "prod_networking" {
   private_subnets    = ["10.2.10.0/24", "10.2.11.0/24", "10.2.12.0/24"]
   database_subnets   = ["10.2.100.0/24", "10.2.110.0/24", "10.2.120.0/24"]
   availability_zones = data.aws_availability_zones.az.names
-
-  public_subnet_tags = {
-    "kubernetes.io/role/elb"                      = "1"
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/role/internal-elb"             = "1"
-  }
 }
 
 module "non_prod_networking" {
@@ -24,14 +16,6 @@ module "non_prod_networking" {
   private_subnets    = ["10.3.10.0/24", "10.3.11.0/24", "10.3.12.0/24"]
   database_subnets   = ["10.3.100.0/24", "10.3.110.0/24", "10.3.120.0/24"]
   availability_zones = data.aws_availability_zones.az.names
-
-  public_subnet_tags = {
-    "kubernetes.io/role/elb"                      = "1"
-  }
-
-  private_subnet_tags = {
-    "kubernetes.io/role/internal-elb"             = "1"
-  }
 }
 
 module "non_prod_cluster" {
