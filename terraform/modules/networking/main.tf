@@ -19,7 +19,14 @@ module "vpc" {
   single_nat_gateway   = true
   enable_dns_hostnames = true
   create_igw           = true
-  # map_public_ip_on_launch = 
+
+  public_subnet_tags = {
+    "kubernetes.io/role/elb"                      = "1"
+  }
+
+  private_subnet_tags = {
+    "kubernetes.io/role/internal-elb"             = "1"
+  }
 }
 
 resource "aws_security_group" "eks-master" {
